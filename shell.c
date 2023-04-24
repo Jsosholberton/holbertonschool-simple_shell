@@ -66,7 +66,6 @@ ssize_t get_input(char **str_command, size_t *len)
 	ssize_t read;
 	int i;
 
-	printf("$ ");
 	read = getline(str_command, len, stdin);
 	if (read == -1)
 	{
