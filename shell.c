@@ -49,7 +49,6 @@ int execute_command(char **arr_token, char *argv[])
 	else
 	{
 		wait(&status);
-		free(arr_token);
 	}
 	return (0);
 }
