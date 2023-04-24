@@ -93,14 +93,13 @@ ssize_t get_input(char **str_command, size_t *len)
  *
  * Return: 0 on success, 1 on failure.
  */
-int main(int argc, char *argv[])
+int main(int __attribute__((unused)) argc, char *argv[])
 {
 	char *str_command = NULL;
 	size_t len = 0;
 	ssize_t read;
 	int num_tokens;
 	char **arr_token;
-	int i;
 
 	while (1)
 	{
