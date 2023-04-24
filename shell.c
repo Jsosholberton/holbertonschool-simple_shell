@@ -69,7 +69,7 @@ ssize_t get_input(char **str_command, size_t *len)
 	read = getline(str_command, len, stdin);
 	if (read == -1)
 	{
-		printf("\n");
+		return (-1);
 	}
 	else
 	{
@@ -115,7 +115,6 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		num_tokens = tokenize_command(str_command, arr_token);
 		if (num_tokens == 0)
 		{
-			printf("Error: Token\n");
 			free(arr_token);
 			continue;
 		}
