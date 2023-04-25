@@ -36,6 +36,11 @@ char **tokenize_command(char *str_command)
 		}
 		token = strtok(NULL, " \t\r\n");
 	}
+	if (num_tokens == 0)
+	{
+		free(tokens);
+		return (NULL);
+	}
 	tokens[num_tokens] = NULL;
 	return (tokens);
 }
@@ -123,13 +128,15 @@ int main(int __attribute__((unused)) argc, char *argv[])
 			break;
 
 		arr_token = tokenize_command(str_command);
+		if (arr_token == NULL)
+			continue;
 		if (execute_command(arr_token, argv) == 1)
 		{
 			free(arr_token);
 			continue;
 		}
+		free(arr_token);
 	}
-	free(arr_token);
 	free(str_command);
 	return (0);
 }
