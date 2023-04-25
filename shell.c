@@ -3,23 +3,41 @@
 /**
  * tokenize_command - Tokenizes the input command.
  * @str_command: The input command to tokenize.
- * @arr_token: The array to store the tokens.
  *
  * Return: Number of tokens in the command.
  */
-int tokenize_command(char *str_command, char **arr_token)
+char **tokenize_command(char *str_command)
 {
 	int num_tokens = 0;
+	int capacity = 16;
+	char **tokens;
 	char *token;
 
-	token = strtok(str_command, " '`\\*&#\t");
+	tokens = malloc(capacity * sizeof(char *));
+	if (!tokens)
+	{
+		perror("Malloc tokens");
+		exit(1);
+	}
+	token = strtok(str_command, " \t\r\n");
 	while (token != NULL)
 	{
-		arr_token[num_tokens++] = token;
-		token = strtok(NULL, " \t");
+		tokens[num_tokens] = token;
+		num_tokens++;
+		if (num_tokens >= capacity)
+		{
+			capacity = (int) (capacity * 1.5);
+			tokens = realloc(tokens, capacity * sizeof(char *));
+			if (tokens == NULL)
+			{
+				perror("error realloc");
+				exit(1);
+			}
+		}
+		token = strtok(NULL, " \t\r\n");
 	}
-	arr_token[num_tokens] = NULL;
-	return (num_tokens);
+	tokens[num_tokens] = NULL;
+	return (tokens);
 }
 
 /**
@@ -96,7 +114,6 @@ int main(int __attribute__((unused)) argc, char *argv[])
 	char *str_command = NULL;
 	size_t len = 0;
 	ssize_t read;
-	int num_tokens;
 	char **arr_token;
 
 	while (1)
@@ -105,24 +122,14 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		if (read == -1)
 			break;
 
-		arr_token = (char **)malloc(sizeof(char *) * 2);
-		if (arr_token == NULL)
-		{
-			perror("Error malloc: ");
-			return (1);
-		}
-		num_tokens = tokenize_command(str_command, arr_token);
-		if (num_tokens == 0)
-		{
-			free(arr_token);
-			continue;
-		}
+		arr_token = tokenize_command(str_command);
 		if (execute_command(arr_token, argv) == 1)
 		{
 			free(arr_token);
 			continue;
 		}
 	}
+	free(arr_token);
 	free(str_command);
 	return (0);
 }

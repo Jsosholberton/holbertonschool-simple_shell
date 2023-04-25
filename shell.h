@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int tokenize_command(char *str_command, char **arr_token);
+char **tokenize_command(char *str_command);
 int execute_command(char **arr_token, char *argv[]);
 ssize_t get_input(char **str_command, size_t *len);
 int main(int argc, char *argv[]);
