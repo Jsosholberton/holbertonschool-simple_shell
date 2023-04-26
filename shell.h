@@ -14,4 +14,6 @@ int main(int argc, char *argv[]);
 void no_interactive(char *argv[]);
 char *found_path(char *command);
 
+extern int status;
+
 #endif

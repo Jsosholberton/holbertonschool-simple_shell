@@ -8,10 +8,9 @@
  */
 char **tokenize_command(char *str_command)
 {
-	int num_tokens = 0;
-	int capacity = 16;
+	int num_tokens = 0, capacity = 16;
 	char **tokens;
-	char *token;
+	char *token, *new_token = NULL, *modified_token = NULL;
 
 	tokens = malloc(capacity * sizeof(char *));
 	if (!tokens)
@@ -30,7 +29,6 @@ char **tokenize_command(char *str_command)
 			tokens = realloc(tokens, capacity * sizeof(char *));
 			if (tokens == NULL)
 			{
-				perror("error realloc");
 				exit(1);
 			}
 		}
@@ -43,7 +41,10 @@ char **tokenize_command(char *str_command)
 	}
 	if (found_path(tokens[0]) != NULL)
 	{
-		tokens[0] = found_path(tokens[0]);
+		modified_token = found_path(tokens[0]);
+		new_token = malloc(strlen(modified_token) + 1);
+		strcpy(new_token, modified_token);
+		tokens[0] = new_token;
 	}
 	tokens[num_tokens] = NULL;
 	return (tokens);
@@ -60,17 +61,20 @@ int execute_command(char **arr_token, char *argv[])
 {
 	pid_t sub_process;
 	int status;
+	int error = 1;
 
 	if (access(arr_token[0], X_OK) == -1)
 	{
-		printf("%s: %s: not found\n", argv[0], arr_token[0]);
-		return (1);
+		fprintf(stderr, "%s: %d: %s: not found\n ", argv[0], error,
+			arr_token[0]);
+		status = 127;
+		return (error);
 	}
 	sub_process = fork();
 	if (sub_process == -1)
 	{
 		perror("Error fork: ");
-		return (1);
+		return (error);
 	}
 	else if (sub_process == 0)
 	{
