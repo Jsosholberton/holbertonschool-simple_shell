@@ -41,6 +41,10 @@ char **tokenize_command(char *str_command)
 		free(tokens);
 		return (NULL);
 	}
+	if (found_path(tokens[0]) != NULL)
+	{
+		tokens[0] = found_path(tokens[0]);
+	}
 	tokens[num_tokens] = NULL;
 	return (tokens);
 }
@@ -123,9 +127,14 @@ int main(int __attribute__((unused)) argc, char *argv[])
 
 	while (1)
 	{
+		no_interactive(argv);
+		printf("#cisfun$ ");
 		read = get_input(&str_command, &len);
 		if (read == -1)
+		{
+			printf("\n");
 			break;
+		}
 
 		arr_token = tokenize_command(str_command);
 		if (arr_token == NULL)
