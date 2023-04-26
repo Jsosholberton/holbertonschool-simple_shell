@@ -61,6 +61,11 @@ int execute_command(char **arr_token, char *argv[])
 	pid_t sub_process;
 	int status;
 
+	if (access(arr_token[0], X_OK) == -1)
+	{
+		printf("%s: %s: not found\n", argv[0], arr_token[0]);
+		return (1);
+	}
 	sub_process = fork();
 	if (sub_process == -1)
 	{

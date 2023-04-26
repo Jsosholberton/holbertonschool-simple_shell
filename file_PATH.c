@@ -8,7 +8,7 @@
 char *found_path(char *command)
 {
 	char *path = getenv("PATH");
-	char *path_copy = strdup(path);
+	char *path_copy;
 	char *token;
 	char file_path[1024];
 	char *result;
@@ -17,6 +17,7 @@ char *found_path(char *command)
 	{
 		return (NULL);
 	}
+	path_copy = strdup(path);
 	token = strtok(path_copy, ":");
 	while (token != NULL)
 	{
