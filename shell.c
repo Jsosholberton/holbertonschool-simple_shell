@@ -1,5 +1,7 @@
 #include "shell.h"
 
+int status = 0;
+
 /**
  * tokenize_command - Tokenizes the input command.
  * @str_command: The input command to tokenize.
@@ -110,6 +112,7 @@ ssize_t get_input(char **str_command, size_t *len)
 	read = getline(str_command, len, stdin);
 	if (read == -1)
 	{
+		status = 127;
 		return (-1);
 	}
 	else
@@ -149,7 +152,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		if (read == -1)
 		{
 			printf("\n");
-			break;
+			exit(status);
 		}
 
 		arr_token = tokenize_command(str_command);
