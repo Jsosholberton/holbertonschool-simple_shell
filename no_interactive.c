@@ -18,6 +18,12 @@ void no_interactive(char *argv[])
 			arr_token = tokenize_command(str_command);
 			if (arr_token == NULL)
 				continue;
+			if(strcmp(arr_token[0],"exit") == 0)
+			{
+				free(str_command);
+				free(arr_token);
+				exit(0);
+			}
 			if (execute_command(arr_token, argv) == 1)
 			{
 				free(arr_token);
