@@ -51,18 +51,14 @@ int execute_command(char **arr_token, char *argv[])
 {
 	pid_t sub_process;
 	int status, error = 1;
-	char *first_argument = NULL;
+	char *first_argument;
 
-	if (found_path(arr_token[0]) != NULL)
-		{
-			first_argument = found_path(arr_token[0]);
-		}
+	first_argument = found_path(arr_token[0]);
+
 	if (access(arr_token[0], X_OK) == -1 && first_argument == NULL)
 	{
-		fprintf(stderr, "%s: %d: %s: not found\n ", argv[0], error,
+		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], error,
 			arr_token[0]);
-		free(first_argument);
-		free(arr_token);
 		return (error);
 	}
 	sub_process = fork();
@@ -79,18 +75,17 @@ int execute_command(char **arr_token, char *argv[])
 		}
 		else
 		{
-			execve(arr_token[0], arr_token, NULL);
+       		execve(arr_token[0], arr_token, NULL);
 		}
                 perror(argv[0]);
-		free(first_argument);
 		free(arr_token);
                 exit(EXIT_FAILURE);
         }
 	else
 	{
-		free(first_argument);
 		wait(&status);
 	}
+	free(first_argument);
 	return (0);
 }
 
@@ -138,6 +133,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
 	size_t len = 0;
 	ssize_t read;
 	char **arr_token;
+	int i = 0;
 
 	while (1)
 	{
@@ -159,7 +155,13 @@ int main(int __attribute__((unused)) argc, char *argv[])
 			continue;
 		}
 		free(arr_token);
+		i++;
 	}
-	free(str_command);
+	if (read != -1)
+		free(str_command);
+	if(read == -1 && i > 0)
+	{
+		free(str_command);
+	}
 	return (0);
 }
