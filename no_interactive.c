@@ -10,6 +10,7 @@ void no_interactive(char *argv[])
 	size_t len = 0;
 	char **arr_token;
 
+	status = 127;
 	if (!(isatty(STDIN_FILENO)))
 	{
 		while (get_input(&str_command, &len) != -1)
