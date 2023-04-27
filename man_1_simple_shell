@@ -1,0 +1,95 @@
+.TH man 1 "27 Apr 2023" "1.0" "Simple Shell Manual"
+
+.SH NAME
+simple_shell - a simple UNIX command line interpreter
+
+.SH SYNOPSIS
+simple_shell [hsh]
+
+.SH DESCRIPTION
+simple_shell is a simple UNIX command line interpreter. It can be executed in two modes: interactive and non-interactive.
+
+In interactive mode, simple_shell displays a prompt, waits for the user to enter a command, and executes it. This mode is indicated by running the program without any arguments:
+
+$ ./simple_shell
+#cisfun$ 
+
+In non-interactive mode, simple_shell reads commands from a file or from standard input and executes them. This mode is indicated by running the program with a file argument:
+
+$ echo "ls" | ./hsh
+README.md  file_PATH.c  hsh  no_interactive.c  shell.c  shell.h
+
+
+$ echo "ls -l" | ./hsh
+total 16
+-rw-r--r-- 1 root root    15 Apr 24 20:14 README.md
+-rw-r--r-- 1 root root   842 Apr 27 14:16 file_PATH.c
+-rwxr-xr-x 1 root root 17944 Apr 27 19:52 hsh
+-rw-r--r-- 1 root root   863 Apr 27 19:38 no_interactive.c
+-rw-r--r-- 1 root root  3280 Apr 27 19:34 shell.c
+-rw-r--r-- 1 root root   468 Apr 27 19:35 shell.h
+
+$ echo "pwd" | ./hsh
+/home/user
+$
+
+The simple_shell program supports several built-in commands, such as env and exit, which are executed internally by the program. In addition, simple_shell can execute external programs by specifying their path. For example:
+
+$ /bin/ls
+
+Simple_shell also supports command line arguments.
+
+.SH OPTIONS
+This program does not support any command line options.
+
+.SH BUILT-IN COMMANDS
+The following built-in commands are supported by the simple_shell program:
+
+.PP
+cd [directory]
+.RS
+Change the current working directory to \fIdirectory\fP. If \fIdirectory\fP is not provided, the current user's home directory is used.
+.RE
+
+.PP
+exit [status]
+.RS
+Terminate the simple_shell program with the specified \fIstatus\fP code (default is 0).
+.RE
+
+.PP
+help
+.RS
+.RE
+
+.SH RETURN VALUE
+The simple_shell program returns the exit status of the last command executed.
+
+.SH EXAMPLES
+To execute simple_shell in interactive mode, simply run the program without any arguments:
+
+$ ./simple_shell
+$
+
+To execute a command in simple_shell, simply enter the command at the prompt:
+
+$ ./hsh
+#cisfun ls
+README.md  file_PATH.c  hsh  no_interactive.c  shell.c  shell.h
+#cisfun$ pwd
+/home/user
+#cisfun$ exit
+
+To execute simple_shell in non-interactive mode, specify a file with commands as an argument:
+
+$ echo "ls -l" | ./hsh
+total 16
+-rw-r--r-- 1 root root    15 Apr 24 20:14 README.md
+-rw-r--r-- 1 root root   842 Apr 27 14:16 file_PATH.c
+-rwxr-xr-x 1 root root 17944 Apr 27 19:52 hsh
+-rw-r--r-- 1 root root   863 Apr 27 19:38 no_interactive.c
+-rw-r--r-- 1 root root  3280 Apr 27 19:34 shell.c
+-rw-r--r-- 1 root root   468 Apr 27 19:35 shell.h
+
+.SH AUTHOR
+This program was written by Johnatan Steven Ortiz Salazar.
