@@ -36,6 +36,7 @@ char **tokenize_command(char *str_command)
 		token = strtok(NULL, " \t\r\n");
 	}
 	tokens[num_tokens] = NULL;
+	free(token);
 	return (tokens);
 }
 
@@ -60,6 +61,8 @@ int execute_command(char **arr_token, char *argv[])
 	{
 		fprintf(stderr, "%s: %d: %s: not found\n ", argv[0], error,
 			arr_token[0]);
+		free(first_argument);
+		free(arr_token);
 		return (error);
 	}
 	sub_process = fork();
@@ -80,10 +83,12 @@ int execute_command(char **arr_token, char *argv[])
 		}
                 perror(argv[0]);
 		free(first_argument);
+		free(arr_token);
                 exit(EXIT_FAILURE);
         }
 	else
 	{
+		free(first_argument);
 		wait(&status);
 	}
 	return (0);

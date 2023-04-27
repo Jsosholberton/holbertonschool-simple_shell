@@ -23,9 +23,11 @@ char *found_path(char *command)
 	token = strtok(path_copy, ":");
 	while (token != NULL)
 	{
-		len = snprintf(file_path, sizeof(file_path), "%s/%s", token, command);
+		len = snprintf(file_path, sizeof(file_path), "%s/%s",
+			       token, command);
 		if (len > sizeof(file_path))
 		{
+			free(path_copy);
 			break;
 		}
 		if (access(file_path, F_OK) == 0)
@@ -37,5 +39,6 @@ char *found_path(char *command)
 		token = strtok(NULL, ":");
 	}
 	free(path_copy);
+	free(token);
 	return (NULL);
 }
