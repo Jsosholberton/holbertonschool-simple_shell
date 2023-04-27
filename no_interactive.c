@@ -25,6 +25,6 @@ void no_interactive(char *argv[])
 			free(arr_token);
 		}
 		free(str_command);
-		exit(0);
+		exit(status);
 	}
 }
