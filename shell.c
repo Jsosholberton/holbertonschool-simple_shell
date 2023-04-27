@@ -64,9 +64,9 @@ int execute_command(char **arr_token, char *argv[])
 	}
 	if (access(arr_token[0], X_OK) == -1 && first_argument == NULL)
 	{
+		status = 127;
 		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], error,
 			arr_token[0]);
-		status = 127;
 		return (error);
 	}
 	sub_process = fork();
@@ -152,7 +152,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		if (read == -1)
 		{
 			printf("\n");
-			exit(status);
+			exit(127);
 		}
 
 		arr_token = tokenize_command(str_command);

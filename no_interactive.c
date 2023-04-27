@@ -9,7 +9,6 @@ void no_interactive(char *argv[])
 	char *str_command = NULL;
 	size_t len = 0;
 	char **arr_token;
-	status = 0;
 
 	if (!(isatty(STDIN_FILENO)))
 	{
