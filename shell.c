@@ -10,9 +10,9 @@ char **tokenize_command(char *str_command)
 {
 	int num_tokens = 0, capacity = 16;
 	char **tokens;
-	char *token, *new_token = NULL, *modified_token = NULL;
+	char *token;
 
-	tokens = malloc(capacity * sizeof(char *));
+	tokens = malloc(sizeof(char *));
 	if (!tokens)
 	{
 		perror("Malloc tokens");
@@ -29,7 +29,8 @@ char **tokenize_command(char *str_command)
 			tokens = realloc(tokens, capacity * sizeof(char *));
 			if (tokens == NULL)
 			{
-				exit(1);
+				free(tokens);
+				return (NULL);
 			}
 		}
 		token = strtok(NULL, " \t\r\n");
@@ -38,13 +39,6 @@ char **tokenize_command(char *str_command)
 	{
 		free(tokens);
 		return (NULL);
-	}
-	if (found_path(tokens[0]) != NULL)
-	{
-		modified_token = found_path(tokens[0]);
-		new_token = malloc(strlen(modified_token) + 1);
-		strcpy(new_token, modified_token);
-		tokens[0] = new_token;
 	}
 	tokens[num_tokens] = NULL;
 	return (tokens);
@@ -62,12 +56,16 @@ int execute_command(char **arr_token, char *argv[])
 	pid_t sub_process;
 	int status;
 	int error = 1;
+	char *first_argument;
 
-	if (access(arr_token[0], X_OK) == -1)
+	if (found_path(arr_token[0]) != NULL)
+		{
+			first_argument = found_path(arr_token[0]);
+		}
+	if (access(arr_token[0], X_OK) == -1 && first_argument == NULL)
 	{
 		fprintf(stderr, "%s: %d: %s: not found\n ", argv[0], error,
 			arr_token[0]);
-		status = 127;
 		return (error);
 	}
 	sub_process = fork();
@@ -76,12 +74,18 @@ int execute_command(char **arr_token, char *argv[])
 		perror("Error fork: ");
 		return (error);
 	}
-	else if (sub_process == 0)
+	else if (sub_process == 0 && first_argument != NULL)
 	{
-		execve(arr_token[0], arr_token, NULL);
+		execve(first_argument, arr_token, NULL);
 		perror(argv[0]);
 		exit(EXIT_FAILURE);
 	}
+	else if (sub_process == 0 && first_argument == NULL)
+	{
+		execve(arr_token[0], arr_token, NULL);
+                perror(argv[0]);
+                exit(EXIT_FAILURE);
+        }
 	else
 	{
 		wait(&status);
@@ -104,6 +108,7 @@ ssize_t get_input(char **str_command, size_t *len)
 	read = getline(str_command, len, stdin);
 	if (read == -1)
 	{
+		free(str_command);
 		return (-1);
 	}
 	else

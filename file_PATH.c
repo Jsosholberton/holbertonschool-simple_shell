@@ -9,27 +9,32 @@ char *found_path(char *command)
 {
 	char *path = getenv("PATH");
 	char *path_copy;
-	char *token;
+	char *token, *result;
 	char file_path[1024];
-	char *result;
+	long unsigned int len = 0;
 
 	if (path == NULL)
 	{
 		return (NULL);
 	}
 	path_copy = strdup(path);
+	if(path_copy == NULL)
+		return (NULL);
 	token = strtok(path_copy, ":");
 	while (token != NULL)
 	{
-		snprintf(file_path, sizeof(file_path), "%s/%s", token, command);
+		len = snprintf(file_path, sizeof(file_path), "%s/%s", token, command);
+		if (len > sizeof(file_path))
+		{
+			break;
+		}
 		if (access(file_path, F_OK) == 0)
 		{
 			result = strdup(file_path);
-			free(path_copy);
-			return (result);
+			break;
 		}
 		token = strtok(NULL, ":");
 	}
 	free(path_copy);
-	return (NULL);
+	return (result);
 }
