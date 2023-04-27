@@ -64,6 +64,7 @@ int execute_command(char **arr_token, char *argv[])
 	{
 		fprintf(stderr, "%s: %d: %s: not found\n", argv[0], error,
 			arr_token[0]);
+		status = 127;
 		return (error);
 	}
 	sub_process = fork();
