@@ -52,7 +52,7 @@ char **tokenize_command(char *str_command)
 int execute_command(char **arr_token, char *argv[])
 {
 	pid_t sub_process;
-	int status, error = 1;
+	int error = 1;
 	char *first_argument;
 
 	if(arr_token[0] == NULL)
