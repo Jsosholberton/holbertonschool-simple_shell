@@ -134,7 +134,7 @@ ssize_t get_input(char **str_command, size_t *len)
  *
  * Return: 0 on success, 1 on failure.
  */
-int main(int __attribute__((unused)) argc, char *argv[])
+int main(int __attribute__((unused)) argc, char *argv[], char **environ)
 {
 	char *str_command = NULL;
 	size_t len = 0;
@@ -144,7 +144,7 @@ int main(int __attribute__((unused)) argc, char *argv[])
 
 	while (1)
 	{
-		no_interactive(argv);
+		no_interactive(argv, environ);
 		printf("#cisfun$ ");
 		read = get_input(&str_command, &len);
 		if (read == -1)

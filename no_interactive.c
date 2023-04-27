@@ -4,11 +4,12 @@
  * @argv: name of executable for the errors
  *
  */
-void no_interactive(char *argv[])
+void no_interactive(char *argv[], char **environ)
 {
 	char *str_command = NULL;
 	size_t len = 0;
 	char **arr_token;
+	char **env = NULL;
 
 	status = 127;
 	if (!(isatty(STDIN_FILENO)))
@@ -23,6 +24,15 @@ void no_interactive(char *argv[])
 				free(str_command);
 				free(arr_token);
 				exit(0);
+			}
+			if(strcmp(arr_token[0], "env") == 0)
+			{
+				env = environ;
+				while (*env != NULL)
+				{
+					printf("%s\n", *env);
+					env++;
+				}
 			}
 			if (execute_command(arr_token, argv) == 1)
 			{
