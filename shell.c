@@ -9,10 +9,10 @@
 char **tokenize_command(char *str_command)
 {
 	int num_tokens = 0, capacity = 16;
-	char **tokens;
-	char *token;
+	char **tokens = NULL;
+	char *token = NULL;
 
-	tokens = malloc(sizeof(char *));
+	tokens = malloc(capacity * sizeof(char *));
 	if (!tokens)
 	{
 		perror("Malloc tokens");
@@ -21,24 +21,19 @@ char **tokenize_command(char *str_command)
 	token = strtok(str_command, " \t\r\n");
 	while (token != NULL)
 	{
-		tokens[num_tokens] = token;
-		num_tokens++;
 		if (num_tokens >= capacity)
 		{
 			capacity = (int) (capacity * 1.5);
 			tokens = realloc(tokens, capacity * sizeof(char *));
 			if (tokens == NULL)
 			{
+				perror("Realloc tokens");
 				free(tokens);
 				return (NULL);
 			}
 		}
+		tokens[num_tokens++] = token;
 		token = strtok(NULL, " \t\r\n");
-	}
-	if (num_tokens == 0)
-	{
-		free(tokens);
-		return (NULL);
 	}
 	tokens[num_tokens] = NULL;
 	return (tokens);
@@ -54,9 +49,8 @@ char **tokenize_command(char *str_command)
 int execute_command(char **arr_token, char *argv[])
 {
 	pid_t sub_process;
-	int status;
-	int error = 1;
-	char *first_argument;
+	int status, error = 1;
+	char *first_argument = NULL;
 
 	if (found_path(arr_token[0]) != NULL)
 		{
@@ -74,16 +68,18 @@ int execute_command(char **arr_token, char *argv[])
 		perror("Error fork: ");
 		return (error);
 	}
-	else if (sub_process == 0 && first_argument != NULL)
+	else if (sub_process == 0)
 	{
-		execve(first_argument, arr_token, NULL);
-		perror(argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	else if (sub_process == 0 && first_argument == NULL)
-	{
-		execve(arr_token[0], arr_token, NULL);
+		if (first_argument != NULL)
+		{
+			execve(first_argument, arr_token, NULL);
+		}
+		else
+		{
+			execve(arr_token[0], arr_token, NULL);
+		}
                 perror(argv[0]);
+		free(first_argument);
                 exit(EXIT_FAILURE);
         }
 	else
@@ -108,7 +104,6 @@ ssize_t get_input(char **str_command, size_t *len)
 	read = getline(str_command, len, stdin);
 	if (read == -1)
 	{
-		free(str_command);
 		return (-1);
 	}
 	else

@@ -9,7 +9,7 @@ char *found_path(char *command)
 {
 	char *path = getenv("PATH");
 	char *path_copy;
-	char *token, *result;
+	char *token, *result = NULL;
 	char file_path[1024];
 	long unsigned int len = 0;
 
@@ -31,10 +31,11 @@ char *found_path(char *command)
 		if (access(file_path, F_OK) == 0)
 		{
 			result = strdup(file_path);
-			break;
+			free(path_copy);
+			return (result);
 		}
 		token = strtok(NULL, ":");
 	}
 	free(path_copy);
-	return (result);
+	return (NULL);
 }
