@@ -9,6 +9,7 @@ void no_interactive(char *argv[])
 	char *str_command = NULL;
 	size_t len = 0;
 	char **arr_token;
+	int i = 0;
 
 	status = 127;
 	if (!(isatty(STDIN_FILENO)))
@@ -17,7 +18,14 @@ void no_interactive(char *argv[])
 		{
 			arr_token = tokenize_command(str_command);
 			if (arr_token == NULL)
+			{
+				if (i > 0)
+				{
+					free(arr_token);
+					free(str_command);
+				}
 				continue;
+			}
 			if(strcmp(arr_token[0],"exit") == 0)
 			{
 				free(str_command);

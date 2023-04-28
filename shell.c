@@ -22,7 +22,10 @@ char **tokenize_command(char *str_command)
 	}
 	token = strtok(str_command, " \t\r\n");
 	if(token == NULL)
+	{
+		free(tokens);
 		return (NULL);
+	}
 	while (token != NULL)
 	{
 		if (num_tokens >= capacity)
@@ -154,6 +157,11 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		read = get_input(&str_command, &len);
 		if (read == -1)
 		{
+			if(i > 0)
+			{
+				free(arr_token);
+				free(str_command);
+			}
 			printf("\n");
 			exit(status);
 		}
@@ -171,9 +179,5 @@ int main(int __attribute__((unused)) argc, char *argv[])
 	}
 	if (read != -1)
 		free(str_command);
-	if(read == -1 && i > 0)
-	{
-		free(str_command);
-	}
 	return (0);
 }
