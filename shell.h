@@ -10,8 +10,8 @@
 char **tokenize_command(char *str_command);
 int execute_command(char **arr_token, char *argv[]);
 ssize_t get_input(char **str_command, size_t *len);
-int main(int argc, char *argv[], char **environ);
-void no_interactive(char *argv[], char **environ);
+int main(int argc, char *argv[]);
+void no_interactive(char *argv[]);
 char *found_path(char *command);
 
 extern int status;

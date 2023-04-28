@@ -85,6 +85,7 @@ int execute_command(char **arr_token, char *argv[])
        		execve(arr_token[0], arr_token, environ);
 		}
                 perror(argv[0]);
+		status = 2;
 		free(arr_token);
                 exit(EXIT_FAILURE);
         }
@@ -134,7 +135,7 @@ ssize_t get_input(char **str_command, size_t *len)
  *
  * Return: 0 on success, 1 on failure.
  */
-int main(int __attribute__((unused)) argc, char *argv[], char **environ)
+int main(int __attribute__((unused)) argc, char *argv[])
 {
 	char *str_command = NULL;
 	size_t len = 0;
@@ -144,7 +145,7 @@ int main(int __attribute__((unused)) argc, char *argv[], char **environ)
 
 	while (1)
 	{
-		no_interactive(argv, environ);
+		no_interactive(argv);
 		printf("#cisfun$ ");
 		read = get_input(&str_command, &len);
 		if (read == -1)
