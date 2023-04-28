@@ -21,6 +21,8 @@ char **tokenize_command(char *str_command)
 		exit(1);
 	}
 	token = strtok(str_command, " \t\r\n");
+	if(token == NULL)
+		return (NULL);
 	while (token != NULL)
 	{
 		if (num_tokens >= capacity)
@@ -58,7 +60,7 @@ int execute_command(char **arr_token, char *argv[])
 	if(arr_token[0] == NULL)
 		return (error);
 	first_argument = found_path(arr_token[0]);
-	if (first_argument == NULL && arr_token == NULL)
+	if (first_argument == NULL || arr_token == NULL)
 	{
 		return (error);
 	}
