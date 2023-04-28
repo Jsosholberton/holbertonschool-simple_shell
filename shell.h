@@ -15,5 +15,6 @@ void no_interactive(char *argv[], char **environ);
 char *found_path(char *command);
 
 extern int status;
+extern char **environ;
 
 #endif

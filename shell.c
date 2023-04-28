@@ -78,11 +78,11 @@ int execute_command(char **arr_token, char *argv[])
 	{
 		if (first_argument != NULL)
 		{
-			execve(first_argument, arr_token, NULL);
+			execve(first_argument, arr_token, environ);
 		}
 		else
 		{
-       		execve(arr_token[0], arr_token, NULL);
+       		execve(arr_token[0], arr_token, environ);
 		}
                 perror(argv[0]);
 		free(arr_token);
