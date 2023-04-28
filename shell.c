@@ -58,9 +58,11 @@ int execute_command(char **arr_token, char *argv[])
 	char *first_argument;
 
 	if(arr_token[0] == NULL)
+	{
 		return (error);
+	}
 	first_argument = found_path(arr_token[0]);
-	if (first_argument == NULL || arr_token == NULL)
+	if (first_argument == NULL && arr_token == NULL)
 	{
 		return (error);
 	}
